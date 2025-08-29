@@ -3,4 +3,5 @@ export const routes = {
   signIn: "/signin",
   terms: "/terms",
   privacy: "/privacy",
+  chat: "/dashboard/chat",
 } as const;

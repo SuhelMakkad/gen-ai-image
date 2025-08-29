@@ -1,21 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { PromptTextarea } from "./components/prompt-textarea";
 
 const HomePage = () => {
   return (
     <main className="container mx-auto flex-1 px-4 py-8">
-      <div className="flex flex-col items-center justify-center text-center">
-        <h1 className="text-foreground mb-4 text-4xl font-bold">Generate AI Images</h1>
-        <p className="text-muted-foreground mb-8 max-w-2xl text-xl">
-          Create stunning AI-generated images with advanced machine learning models. Transform your
-          ideas into visual art.
-        </p>
-        <div className="flex gap-4">
-          <Button size="lg">Get Started</Button>
-          <Button variant="outline" size="lg">
-            Learn More
-          </Button>
-        </div>
-      </div>
+      <section className="flex h-[calc(100vh-300px)] flex-col items-center justify-center gap-10">
+        <header className="flex flex-col items-center justify-center gap-3">
+          <h1 className="text-foreground text-3xl font-medium">Generate Image with AI</h1>
+          <p className="text-muted-foreground max-w-lg text-center text-base">
+            Create stunning AI-generated images with advanced machine learning models. Transform
+            your ideas into visual art.
+          </p>
+        </header>
+
+        <PromptTextarea />
+      </section>
     </main>
   );
 };

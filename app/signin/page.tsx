@@ -32,7 +32,10 @@ export default function SignIn() {
   const handleSocialSignIn = async (provider: OAuthProvider) => {
     try {
       setLoading(provider);
-      await signIn(provider);
+
+      await signIn(provider, {
+        redirectTo: routes.chat,
+      });
     } catch (error) {
       setLoading(null);
       toast.error("Failed to sign in", {
