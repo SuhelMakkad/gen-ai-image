@@ -51,8 +51,8 @@ export const InputWithElement = React.forwardRef<HTMLInputElement, InputWithElem
           className={cn(
             "placeholder:text-muted-foreground flex-1 rounded-md rounded-l-md border-none bg-transparent px-3 py-1 outline-none",
             inputClassName,
-            !!leadingElement && "rounded-l-none",
-            !!trailingElement && "rounded-r-none"
+            !!leadingElement && "rounded-l-none ps-0",
+            !!trailingElement && "rounded-r-none pe-0"
           )}
           {...props}
         />

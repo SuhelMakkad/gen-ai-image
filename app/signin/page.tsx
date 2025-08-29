@@ -34,7 +34,7 @@ export default function SignIn() {
       setLoading(provider);
 
       await signIn(provider, {
-        redirectTo: routes.chat,
+        redirectTo: routes.chat("new"),
       });
     } catch (error) {
       setLoading(null);
