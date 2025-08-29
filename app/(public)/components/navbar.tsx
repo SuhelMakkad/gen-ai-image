@@ -22,7 +22,9 @@ import { routes } from "@/utils/routes";
 export function Navbar() {
   const { signOut } = useAuthActions();
   const { theme, setTheme } = useTheme();
-  const user = useQuery(api.myFunctions.currentUser);
+  const user = useQuery(api.auth.currentUser);
+
+  console.log(user);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
