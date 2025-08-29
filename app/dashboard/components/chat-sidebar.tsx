@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquare, Search, Sparkles } from "lucide-react";
+import { MessageSquare, Search } from "lucide-react";
 
 import Link from "next/link";
 
@@ -51,19 +51,8 @@ export function ChatSidebar() {
       {/* Header */}
       <SidebarHeader className="flex items-center gap-1">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              size="lg"
-              className="data-[slot=sidebar-menu-button]:!p-1.5 [&>svg]:size-4"
-            >
-              <Link href={routes.chat("new")}>
-                <div className="bg-secondary grid size-8 place-items-center rounded-lg shadow-sm">
-                  <Sparkles className="size-4" />
-                </div>
-                <span className="text-sm font-semibold">Gen AI Img</span>
-              </Link>
-            </SidebarMenuButton>
+          <SidebarMenuItem className="mt-1 flex flex-row items-center gap-2">
+            <span className="w-full text-center text-base font-medium">Gen AI Img</span>
           </SidebarMenuItem>
         </SidebarMenu>
 

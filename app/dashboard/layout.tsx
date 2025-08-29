@@ -1,19 +1,22 @@
+import { Button } from "@/components/ui/button";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 import { ChatSidebar } from "@/app/dashboard/components/chat-sidebar";
 
 const DashboardLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="relative">
       <ChatSidebar />
 
-      <SidebarInset>
-        <div className="p-4">
-          <SidebarTrigger />
-        </div>
-
-        {children}
-      </SidebarInset>
+      <Button
+        asChild
+        size="icon"
+        variant="ghost"
+        className="bg-background absolute left-2 top-2 z-10 size-7"
+      >
+        <SidebarTrigger />
+      </Button>
+      <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
 };
