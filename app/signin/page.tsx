@@ -1,64 +1,79 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
+import { toast } from "sonner";
 
-import { useState } from "react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+
+import { routes } from "@/utils/routes";
+
+const ShootingStars = dynamic(
+  () => import("@/components/ui/shooting-stars").then((mod) => mod.ShootingStars),
+  { ssr: false }
+);
+const StarsBackground = dynamic(
+  () => import("@/components/ui/stars-background").then((mod) => mod.StarsBackground),
+  { ssr: false }
+);
 
 export default function SignIn() {
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+
+  const handleSocialSignIn = async (provider: "google" | "github") => {
+    try {
+      await signIn(provider);
+    } catch (error) {
+      toast.error("Failed to sign in", {
+        description:
+          error instanceof Error ? error.message : "Something went wrong, please try again.",
+      });
+    }
+  };
+
   return (
-    <div className="mx-auto flex h-screen w-96 flex-col items-center justify-center gap-8">
-      <p>Log in to see the numbers</p>
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.target as HTMLFormElement);
-          formData.set("flow", flow);
-          void signIn("password", formData)
-            .catch((error) => {
-              setError(error.message);
-            })
-            .then(() => {
-              router.push("/");
-            });
-        }}
-      >
-        <input
-          className="bg-background text-foreground rounded-md border-2 border-slate-200 p-2 dark:border-slate-800"
-          type="email"
-          name="email"
-          placeholder="Email"
-        />
-        <input
-          className="bg-background text-foreground rounded-md border-2 border-slate-200 p-2 dark:border-slate-800"
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
-        <button className="bg-foreground text-background rounded-md" type="submit">
-          {flow === "signIn" ? "Sign in" : "Sign up"}
-        </button>
-        <div className="flex flex-row gap-2">
-          <span>{flow === "signIn" ? "Don't have an account?" : "Already have an account?"}</span>
-          <span
-            className="text-foreground cursor-pointer underline hover:no-underline"
-            onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
-          >
-            {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
-          </span>
+    <>
+      {/* Left Column - Sign In Form */}
+      <main className="mx-auto flex w-full max-w-xs flex-1 flex-col items-center justify-center gap-4">
+        {/* Header Section */}
+        <header className="w-full text-center">
+          <h1 className="text-foreground text-3xl font-semibold">Welcome</h1>
+          <p className="text-muted-foreground text-base">Sign in to continue</p>
+        </header>
+
+        <div className="flex w-full flex-col gap-4">
+          <Button onClick={() => handleSocialSignIn("google")}>
+            <FaGoogle />
+            Continue with Google
+          </Button>
+          <Button onClick={() => handleSocialSignIn("github")}>
+            <FaGithub />
+            Continue with GitHub
+          </Button>
         </div>
-        {error && (
-          <div className="rounded-md border-2 border-red-500/50 bg-red-500/20 p-2">
-            <p className="text-foreground font-mono text-xs">Error signing in: {error}</p>
-          </div>
-        )}
-      </form>
-    </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="mt-auto py-6">
+        <p className="text-muted-foreground text-center text-xs">
+          By continuing, you agree to our{" "}
+          <Link href={routes.terms} className="hover:text-foreground font-medium">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link href={routes.privacy} className="hover:text-foreground font-medium">
+            Privacy Policy
+          </Link>
+        </p>
+      </footer>
+
+      <div className="-z-10">
+        <ShootingStars />
+        <StarsBackground />
+      </div>
+    </>
   );
 }

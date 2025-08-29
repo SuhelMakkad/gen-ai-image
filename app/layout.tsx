@@ -32,7 +32,9 @@ export default function RootLayout({
   return (
     <ConvexAuthNextjsServerProvider>
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} flex h-dvh flex-col antialiased`}
+        >
           <GlobalProviders>{children}</GlobalProviders>
         </body>
       </html>
