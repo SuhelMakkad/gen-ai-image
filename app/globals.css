@@ -129,3 +129,28 @@
     @apply cursor-pointer;
   }
 }
+
+@utility container-padding {
+  @apply px-3 md:px-4 lg:px-6;
+}
+
+@utility -container-padding {
+  @apply -mx-3 md:-mx-4 lg:-mx-6;
+}
+
+@utility wrapper {
+  @apply @container/main container-padding mx-auto flex w-full flex-1 flex-col py-4 md:py-6;
+}
+
+@utility no-appearance {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    @apply appearance-none;
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+}
