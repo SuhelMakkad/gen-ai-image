@@ -1,46 +1,111 @@
-# Welcome to your Convex + Next.js + Convex Auth app
+## Project Overview
 
-This is a [Convex](https://convex.dev/) project created with [`npm create convex`](https://www.npmjs.com/package/create-convex).
+A Convex + Next.js full-stack application with authentication using:
+- **Convex**: Backend database and server logic
+- **Next.js 15**: React framework with App Router
+- **Convex Auth**: Authentication system
+- **Tailwind CSS + shadcn/ui**: Styling and UI components
+- **TypeScript**: Type safety throughout
 
-After the initial setup (<2 minutes) you'll have a working full-stack app using:
+## Development Commands
 
-- Convex as your backend (database, server logic)
-- [React](https://react.dev/) as your frontend (web page interactivity)
-- [Next.js](https://nextjs.org/) for optimized web hosting and page routing
-- [Tailwind](https://tailwindcss.com/) for building great looking accessible UI
-- [Convex Auth](https://labs.convex.dev/auth) for authentication
+### Core Development
+```bash
+# Start both frontend and backend in parallel
+bun dev
 
-## Get started
+# Individual services
+bun dev:frontend  # Next.js development server
+bun dev:backend   # Convex development server
 
-If you just cloned this codebase and didn't use `npm create convex`, run:
-
-```
-npm install
-npm run dev
-```
-
-If you're reading this README on GitHub and want to use this template, run:
-
-```
-npm create convex@latest -- -t nextjs-convexauth
+# Setup and dashboard (runs before dev)
+bun predev
 ```
 
-## Learn more
+### Build and Quality
+```bash
+# Build for production
+bun build
 
-To learn more about developing your project with Convex, check out:
+# Start production server
+bun
 
-- The [Tour of Convex](https://docs.convex.dev/get-started) for a thorough introduction to Convex principles.
-- The rest of [Convex docs](https://docs.convex.dev/) to learn about all Convex features.
-- [Stack](https://stack.convex.dev/) for in-depth articles on advanced topics.
-- [Convex Auth docs](https://labs.convex.dev/auth) for documentation on the Convex Auth library.
+# Linting and formatting
+bun lint
+bun format:write   # Format all files
+bun format:check   # Check formatting only
+```
 
-## Configuring other authentication methods
+### Convex Commands
+```bash
+# Push schema and functions to Convex
+npx convex dev
 
-To configure different authentication methods, see [Configuration](https://labs.convex.dev/auth/config) in the Convex Auth docs.
+# Access Convex dashboard
+npx convex dashboard
 
-## Join the community
+# Deploy to production
+npx convex deploy
+```
 
-Join thousands of developers building full-stack apps with Convex:
+## Architecture
 
-- Join the [Convex Discord community](https://convex.dev/community) to get help in real-time.
-- Follow [Convex on GitHub](https://github.com/get-convex/), star and contribute to the open-source implementation of Convex.
+### Frontend Structure
+- **App Router**: Uses Next.js 15 App Router pattern (`app/` directory)
+- **Components**: UI components in `components/ui/` (shadcn/ui), app components in `app/components/`
+- **Providers**: Global providers in `app/components/providers/` (theme, Convex client)
+- **Path Aliases**: `@/*` maps to project root, with specific aliases for components, utils, hooks
+
+### Backend Structure (Convex)
+- **Functions**: `convex/myFunctions.ts` contains queries, mutations, and actions
+- **Schema**: `convex/schema.ts` defines database tables and auth tables
+- **Auth Config**: `convex/auth.config.ts` configures authentication providers
+- **Generated**: `convex/_generated/` contains auto-generated API and types
+
+### Authentication Flow
+- **Protected Routes**: `/` and `/server` require authentication
+- **Sign In Route**: `/signin` handles login/signup with email/password
+- **Middleware**: `middleware.ts` handles route protection and redirects
+- **Auth Integration**: Uses Convex Auth with password provider
+
+### Database Schema
+- **Auth Tables**: Automatic tables from Convex Auth
+- **Numbers Table**: Simple example table with `value: number` field
+
+## Key Patterns
+
+### Convex Functions
+- **Queries**: Read-only data fetching (`useQuery` hook)
+- **Mutations**: Database writes (`useMutation` hook)  
+- **Actions**: External API calls and complex operations (`useAction` hook)
+- **Authentication**: Use `getAuthUserId(ctx)` in functions for user context
+
+### React Patterns
+- **Client Components**: Use `"use client"` directive for interactivity
+- **Server Components**: Default in App Router for better performance
+- **Hooks**: Custom hooks in `hooks/` directory (e.g., `use-mobile.ts`)
+
+### Styling
+- **Tailwind Classes**: Extensive use of Tailwind utility classes
+- **Theme Support**: Dark/light mode via `next-themes`
+- **Component Variants**: Uses `class-variance-authority` for component styling
+- **CSS Variables**: Theme colors defined as CSS custom properties
+
+## File Organization
+
+### Core Files
+- `app/layout.tsx`: Root layout with providers and metadata
+- `app/page.tsx`: Main application page with auth-gated content
+- `app/signin/page.tsx`: Authentication form
+- `middleware.ts`: Route protection middleware
+
+### Configuration
+- `components.json`: shadcn/ui configuration
+- `next.config.ts`: Next.js configuration
+- `convex/tsconfig.json`: Convex-specific TypeScript config
+- `package.json`: Defines parallel dev script pattern
+
+### Quality Tools
+- **ESLint**: `eslint.config.mjs` with Next.js rules
+- **Prettier**: Auto-formatting with import sorting
+- **TypeScript**: Strict mode enabled throughout
