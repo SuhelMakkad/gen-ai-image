@@ -1,8 +1,11 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
+import { Loader2 } from "lucide-react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { toast } from "sonner";
+
+import { useState } from "react";
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -20,13 +23,18 @@ const StarsBackground = dynamic(
   { ssr: false }
 );
 
+type OAuthProvider = "google" | "github";
+
 export default function SignIn() {
   const { signIn } = useAuthActions();
+  const [loading, setLoading] = useState<OAuthProvider | null>(null);
 
-  const handleSocialSignIn = async (provider: "google" | "github") => {
+  const handleSocialSignIn = async (provider: OAuthProvider) => {
     try {
+      setLoading(provider);
       await signIn(provider);
     } catch (error) {
+      setLoading(null);
       toast.error("Failed to sign in", {
         description:
           error instanceof Error ? error.message : "Something went wrong, please try again.",
@@ -45,12 +53,12 @@ export default function SignIn() {
         </header>
 
         <div className="flex w-full flex-col gap-4">
-          <Button onClick={() => handleSocialSignIn("google")}>
-            <FaGoogle />
+          <Button disabled={!!loading} onClick={() => handleSocialSignIn("google")}>
+            {loading === "google" ? <Loader2 className="animate-spin" /> : <FaGoogle />}
             Continue with Google
           </Button>
-          <Button onClick={() => handleSocialSignIn("github")}>
-            <FaGithub />
+          <Button disabled={!!loading} onClick={() => handleSocialSignIn("github")}>
+            {loading === "github" ? <Loader2 className="animate-spin" /> : <FaGithub />}
             Continue with GitHub
           </Button>
         </div>
