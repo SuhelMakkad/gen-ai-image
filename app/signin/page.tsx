@@ -45,10 +45,10 @@ export default function SignIn() {
   return (
     <>
       {/* Left Column - Sign In Form */}
-      <main className="mx-auto flex w-full max-w-xs flex-1 flex-col items-center justify-center gap-4">
+      <main className="mx-auto flex w-full max-w-xs flex-1 flex-col items-center justify-center gap-6">
         {/* Header Section */}
         <header className="w-full text-center">
-          <h1 className="text-foreground text-3xl font-semibold">Welcome</h1>
+          <h1 className="text-foreground text-2xl font-semibold">Welcome</h1>
           <p className="text-muted-foreground text-base">Sign in to continue</p>
         </header>
 
