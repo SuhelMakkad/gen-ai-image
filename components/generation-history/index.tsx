@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { ImageData, ImageDialog } from "@/app/dashboard/components/image-dialog";
 import { truncate } from "@/utils/misc";
+import { cn } from "@/utils/ui";
 
 export const GenerationHistory = ({
   images,
@@ -47,17 +48,23 @@ export const ListItem = ({
   prompt,
   style,
   image,
+  className,
 }: React.PropsWithChildren<{
   prompt?: string;
   style?: string;
   image?: ImageData;
+  className?: string;
 }>) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <ImageDialog asChild image={image}>
+    <ImageDialog asChild image={image} disabled={!prompt}>
       <li
-        className="h-55 bg-secondary group relative col-span-1 w-full cursor-pointer overflow-hidden rounded-md transition-all duration-300 hover:scale-105"
+        className={cn(
+          "h-55 bg-secondary group relative col-span-1 w-full cursor-pointer overflow-hidden rounded-md transition-all duration-300",
+          className,
+          prompt && "hover:scale-105"
+        )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

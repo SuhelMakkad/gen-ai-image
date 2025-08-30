@@ -13,7 +13,7 @@ const GenImagePage = () => {
       </div>
 
       <section className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">
-        <h1 className="text-lg font-medium">Result</h1>
+        <h1 className="text-lg font-medium">Generated Images</h1>
 
         <UserGenerationHistory />
       </section>
