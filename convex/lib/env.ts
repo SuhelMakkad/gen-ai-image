@@ -1,4 +1,7 @@
 export const env = {
   CONVEX_SITE_URL: process.env.CONVEX_SITE_URL!,
   OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY!,
+  POLAR_ORGANIZATION_TOKEN: process.env.POLAR_ORGANIZATION_TOKEN!,
+  POLAR_WEBHOOK_SECRET: process.env.POLAR_WEBHOOK_SECRET!,
+  POLAR_SERVER: process.env.POLAR_SERVER!,
 } as const;
