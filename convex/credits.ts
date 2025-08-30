@@ -11,7 +11,11 @@ export const getUserCredits = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("User not authenticated");
+      return {
+        balance: 0,
+        totalEarned: 0,
+        totalSpent: 0,
+      };
     }
 
     const userCredits = await ctx.db
