@@ -18,7 +18,7 @@ import { formatDate, handleDownload } from "@/utils/misc";
 import { opacityFadeInOut, transition150 } from "@/utils/motion";
 
 // Type for the image data returned from the API
-export type ImageData = Doc<"generations"> & {
+export type ImageData = Omit<Doc<"generations">, "userId"> & {
   imageUrl: string | null;
 };
 

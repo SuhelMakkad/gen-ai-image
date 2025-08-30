@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 import { useScheduledGens } from "@/hooks/use-scheduled-gens";
 
-import { GenerationHistory, ListItem, LoadingItems } from "@/components/generation-history";
+import { GenerationHistory, ListItem, PlaceholderItems } from "@/components/generation-history";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { api } from "@/convex/_generated/api";
@@ -31,7 +31,7 @@ export const UserGenerationHistory = () => {
 
   return (
     <GenerationHistory images={images || []}>
-      {!images?.length ? <LoadingItems /> : null}
+      {!images?.length ? <PlaceholderItems /> : null}
 
       {filteredScheduledGens.map((gen) => (
         <ListItem key={gen.id} prompt={gen.prompt} style={gen.style}>

@@ -1,4 +1,5 @@
 import { PromptTextarea } from "./components/prompt-textarea";
+import { PublicShowcase } from "./components/public-showcase";
 
 const HomePage = () => {
   return (
@@ -13,6 +14,12 @@ const HomePage = () => {
         </header>
 
         <PromptTextarea />
+      </section>
+
+      <section className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">
+        <h2 className="text-lg font-medium">Showcase</h2>
+
+        <PublicShowcase />
       </section>
     </main>
   );

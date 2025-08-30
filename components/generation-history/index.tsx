@@ -23,7 +23,7 @@ export const GenerationHistory = ({
       {children}
 
       {images?.map((image) => (
-        <ListItem key={image.imageId} prompt={image.prompt} style={image.style} image={image}>
+        <ListItem key={image._id} prompt={image.prompt} style={image.style} image={image}>
           {image.imageUrl && (
             <Image
               unoptimized
@@ -55,7 +55,7 @@ export const ListItem = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <ImageDialog image={image}>
+    <ImageDialog asChild image={image}>
       <li
         className="h-55 group relative col-span-1 w-full cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105"
         onMouseEnter={() => setIsHovered(true)}
@@ -89,9 +89,9 @@ export const ListItem = ({
   );
 };
 
-export const LoadingItems = () => {
+export const PlaceholderItems = () => {
   return new Array(4).fill(0).map((_, index) => (
-    <ListItem key={index}>
+    <ListItem key={`loading-${index}`} prompt="" style="">
       <div className="bg-secondary size-full rounded-md" />
     </ListItem>
   ));
