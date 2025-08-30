@@ -15,6 +15,11 @@ export const opacityFadeInOut: Variants = {
   visible: { opacity: 1 },
 };
 
+export const fadeSlideIn: Variants = {
+  hidden: { opacity: 0, y: 100 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export const scaleInOut: Variants = {
   hidden: { scale: 0 },
   visible: { scale: 1 },
