@@ -140,12 +140,12 @@ export const GenImageForm = (props: { className?: string }) => {
             )}
           />
 
-          <div className="flex items-center gap-10 overflow-hidden">
+          <div className="flex flex-col items-center gap-4 overflow-hidden md:flex-row md:gap-6">
             <FormField
               control={form.control}
               name="style"
               render={({ field }) => (
-                <FormItem className="no-scrollbar flex flex-1 items-center gap-2 space-y-0 overflow-auto p-1">
+                <FormItem className="no-scrollbar flex flex-1 flex-wrap items-center gap-2 space-y-0 overflow-auto p-1 md:flex-nowrap">
                   {styleOptions.map((option) => (
                     <Button
                       type="button"
@@ -168,12 +168,22 @@ export const GenImageForm = (props: { className?: string }) => {
 
             {hasInsufficientCredits ? (
               <PriceSelectionDialog asChild>
-                <Button type="button" disabled={isGenerating} size="sm" className="h-7 shrink-0">
+                <Button
+                  type="button"
+                  disabled={isGenerating}
+                  size="sm"
+                  className="h-7 w-full shrink-0 md:w-fit"
+                >
                   Buy Credits
                 </Button>
               </PriceSelectionDialog>
             ) : (
-              <Button type="submit" disabled={isGenerating} size="sm" className="h-7 shrink-0">
+              <Button
+                type="submit"
+                disabled={isGenerating}
+                size="sm"
+                className="h-7 w-full shrink-0 md:w-fit"
+              >
                 {isGenerating ? "Generating..." : "Generate"}
               </Button>
             )}
