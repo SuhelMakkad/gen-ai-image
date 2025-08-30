@@ -1,5 +1,8 @@
 import { GradientBars } from "@/components/ui/gradient-bars";
+import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { TextRipple } from "@/components/ui/text-ripple";
+
+import { githubRepoLink, socials } from "@/utils/socials";
 
 import { PlanSelection } from "./components/plan-selection";
 import { PromptTextarea } from "./components/prompt-textarea";
@@ -35,6 +38,27 @@ const HomePage = () => {
 
         <PlanSelection />
       </section>
+
+      <section>
+        <TextHoverEffect text="GEN AI" />
+      </section>
+
+      <footer className="mt-10wrapper flex flex-col items-center justify-center gap-2">
+        <p className="text-muted-foreground text-center text-xs">
+          Built with ❤️ by{" "}
+          <a href={socials.linkedin} target="_blank">
+            Suhel
+          </a>
+        </p>
+
+        <a
+          target="_blank"
+          href={githubRepoLink}
+          className="text-muted-foreground text-center text-xs"
+        >
+          Github
+        </a>
+      </footer>
     </main>
   );
 };
