@@ -33,7 +33,7 @@ const HomePage = () => {
         <PublicShowcase />
       </section>
 
-      <section id="pricing" className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">
+      <section id="pricing" className="mx-auto my-40 flex w-full max-w-4xl flex-col gap-4">
         <h2 className="text-center text-lg font-medium">Simple Pricing</h2>
 
         <PlanSelection />

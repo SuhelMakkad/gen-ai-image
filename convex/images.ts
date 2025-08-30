@@ -96,24 +96,12 @@ export const generate = mutation({
 export const listPublicShowcase = query({
   args: {},
   handler: async (ctx) => {
-    const maxUsers = 10;
-    const maxGenPerUser = 1;
-    const users = await ctx.db.query("users").order("desc").take(maxUsers);
+    const maxGenerations = 16;
+    const generations = await ctx.db.query("generations").order("desc").take(maxGenerations);
 
     // get latest generation for each user
-    const generations = await Promise.all(
-      users.map(async (user) => {
-        const generations = await ctx.db
-          .query("generations")
-          .withIndex("by_user", (q) => q.eq("userId", user._id))
-          .order("desc")
-          .take(maxGenPerUser);
-
-        const generation = generations?.[0];
-        if (!generation) {
-          return null;
-        }
-
+    const generationsWithImageUrl = await Promise.all(
+      generations.map(async (generation) => {
         const imageUrl = await ctx.storage.getUrl(generation.imageId);
         if (!imageUrl) {
           return null;
@@ -128,7 +116,7 @@ export const listPublicShowcase = query({
       })
     );
 
-    const filteredGenerations = generations.filter(Boolean);
+    const filteredGenerations = generationsWithImageUrl.filter(Boolean);
 
     return filteredGenerations as {
       imageUrl: string;
