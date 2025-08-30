@@ -1,8 +1,10 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { Coins, LogOut, Moon, Sun, User } from "lucide-react";
+import { Authenticated, Unauthenticated, useAction, useQuery } from "convex/react";
+import { ArrowUpRightIcon, Coins, LogOut, Moon, Sun, User } from "lucide-react";
+
+import { useEffect, useState } from "react";
 
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -23,14 +25,28 @@ import { cn } from "@/utils/ui";
 import { CreditDetails } from "./credit-details";
 
 export const Navbar = (props: { className?: string }) => {
-  const { signOut } = useAuthActions();
+  const [billingUrl, setBillingUrl] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
+  const { signOut } = useAuthActions();
+
   const user = useQuery(api.auth.currentUser);
   const userCredits = useQuery(api.credits.getUserCredits);
+  const generateCustomerPortalUrl = useAction(api.polar.generateCustomerPortalUrl);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
+
+  useEffect(() => {
+    const fetchBillingUrl = async () => {
+      const response = await generateCustomerPortalUrl().catch(() => null);
+      if (response) {
+        setBillingUrl(response.url);
+      }
+    };
+
+    fetchBillingUrl();
+  }, [generateCustomerPortalUrl]);
 
   return (
     <div
@@ -76,6 +92,14 @@ export const Navbar = (props: { className?: string }) => {
               <div className="text-muted-foreground truncate text-xs">{user?.email}</div>
             </div>
 
+            {!!billingUrl && (
+              <DropdownMenuItem className="text-sm" asChild>
+                <a href={billingUrl} target="_blank" rel="noopener noreferrer">
+                  <ArrowUpRightIcon />
+                  Billing
+                </a>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem className="text-sm" onClick={() => signOut()}>
               <LogOut />
               Log out
