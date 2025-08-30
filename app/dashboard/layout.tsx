@@ -1,4 +1,10 @@
+import { getMetaData } from "@/utils/seo";
+
 import { Navbar } from "../(public)/components/navbar";
+
+export const metadata = getMetaData({
+  title: "Dashboard",
+});
 
 const DashboardLayout = ({ children }: React.PropsWithChildren) => {
   return (
