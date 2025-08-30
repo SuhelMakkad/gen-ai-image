@@ -1,9 +1,10 @@
 "use client";
 
 import { useQuery } from "convex/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useInterval } from "usehooks-ts";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Image from "next/image";
 
@@ -13,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { api } from "@/convex/_generated/api";
+import { truncate } from "@/utils/misc";
 
 export const GenerationHistory = () => {
   const images = useQuery(api.images.list);
@@ -67,12 +69,30 @@ const ListItem = ({
   prompt?: string;
   style?: string;
 }>) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <li className="h-55 group relative col-span-1 w-full">
+    <li
+      className="h-55 group relative col-span-1 w-full cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {children}
 
       {!!prompt && (
-        <span className="absolute bottom-2 left-2 hidden group-hover:block">{prompt}</span>
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              className="absolute inset-0 z-10 line-clamp-4 flex items-end overscroll-auto rounded-md bg-gradient-to-t from-black/90 to-black/30 p-4 text-sm leading-relaxed text-white"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            >
+              {truncate(prompt, 100)}
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
 
       {!!style && (

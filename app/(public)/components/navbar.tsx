@@ -32,7 +32,7 @@ export function Navbar(props: { className?: string }) {
   return (
     <div
       className={cn(
-        "bg-background/95 supports-[backdrop-filter]:bg-background/60 container-padding flex items-center justify-between gap-2 border-b py-2 backdrop-blur",
+        "bg-background/95 supports-[backdrop-filter]:bg-background/60 container-padding sticky top-0 z-10 flex items-center justify-between gap-2 border-b py-2 backdrop-blur-sm",
         props.className
       )}
     >

@@ -87,7 +87,7 @@ export const GenImageForm = (props: { className?: string }) => {
   }, [prompt]);
 
   return (
-    <section className={cn("flex flex-col gap-4", props.className)}>
+    <section className={cn("isolate flex flex-col gap-4", props.className)}>
       <span className="text-base font-medium">Prompt</span>
 
       <Form {...form}>
