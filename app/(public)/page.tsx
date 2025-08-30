@@ -1,7 +1,7 @@
 import { GradientBars } from "@/components/ui/gradient-bars";
 import { TextRipple } from "@/components/ui/text-ripple";
 
-import { PricingTable } from "./components/price-table";
+import { PlanSelection } from "./components/plan-selection";
 import { PromptTextarea } from "./components/prompt-textarea";
 import { PublicShowcase } from "./components/public-showcase";
 
@@ -33,7 +33,7 @@ const HomePage = () => {
       <section className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">
         <h2 className="text-center text-lg font-medium">Simple Pricing</h2>
 
-        <PricingTable />
+        <PlanSelection />
       </section>
     </main>
   );

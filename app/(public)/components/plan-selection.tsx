@@ -18,7 +18,7 @@ const tabTransition: Transition = {
   duration: 0.6,
 };
 
-export const PricingTable = () => {
+export const PlanSelection = () => {
   const products = useQuery(api.polar.getConfiguredProducts);
   const plans = [products?.hobby, products?.pro].filter(Boolean);
   const [activePlanId, setActivePlanId] = useState<string | null>(null);
