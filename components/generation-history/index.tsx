@@ -8,7 +8,7 @@ import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 
-import { ImageData, ImageDialog } from "@/app/dashboard/gen/components/image-dialog";
+import { ImageData, ImageDialog } from "@/app/dashboard/components/image-dialog";
 import { truncate } from "@/utils/misc";
 
 export const GenerationHistory = ({

@@ -3,5 +3,5 @@ export const routes = {
   signIn: "/signin",
   terms: "/terms",
   privacy: "/privacy",
-  gen: "/dashboard/gen",
+  gen: "/dashboard",
 } as const;
