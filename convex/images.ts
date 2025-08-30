@@ -3,7 +3,28 @@ import { v } from "convex/values";
 import { v4 as uuidv4 } from "uuid";
 
 import { internal } from "./_generated/api";
+import { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
+
+export const get = query({
+  args: {
+    id: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const generation = await ctx.db
+      .query("generations")
+      .withIndex("by_id", (q) => q.eq("_id", args.id as Id<"generations">))
+      .first();
+    if (!generation) {
+      throw null;
+    }
+
+    return {
+      ...generation,
+      imageUrl: await ctx.storage.getUrl(generation.imageId),
+    };
+  },
+});
 
 export const list = query({
   args: {},
