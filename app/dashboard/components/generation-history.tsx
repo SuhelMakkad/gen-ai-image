@@ -17,7 +17,7 @@ export const UserGenerationHistory = () => {
   const userId = useQuery(api.auth.currentUser);
 
   const { scheduledGens, removeScheduledGen, checkStaleGens } = useScheduledGens();
-  useInterval(checkStaleGens, 2_000);
+  useInterval(checkStaleGens, 1000 * 60 * 5); // 5 minutes
 
   const filteredScheduledGens = scheduledGens.filter((gen) => gen.userId === userId?._id);
 
