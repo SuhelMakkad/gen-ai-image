@@ -7,7 +7,7 @@ const openai = new OpenAI({
   apiKey: env.OPENROUTER_API_KEY,
 });
 
-export const genImage = async (prompt: string) => {
+export const genImage = async (prompt: string, style: string) => {
   const completion = await openai.chat.completions.create({
     model: "google/gemini-2.5-flash-image-preview:free",
 
@@ -17,7 +17,7 @@ export const genImage = async (prompt: string) => {
         content: [
           {
             type: "text",
-            text: "You are a helpful assistant that generates images based on a prompt. Only respond with the image data and nothing else.",
+            text: `You are a helpful assistant that generates images based on a prompt. Only respond with the image data and nothing else. The style of the image is ${style}.`,
           },
         ],
       },

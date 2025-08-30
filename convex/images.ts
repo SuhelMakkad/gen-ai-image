@@ -31,7 +31,7 @@ export const list = query({
 export const generate = mutation({
   args: {
     prompt: v.string(),
-    aspectRatio: v.string(),
+    style: v.string(),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -41,13 +41,11 @@ export const generate = mutation({
 
     const uuid = uuidv4();
 
-    console.log("in generate", userId);
-
     await ctx.scheduler.runAfter(0, internal.ai.helpers.generateImgAction, {
       uuid,
       userId,
       prompt: args.prompt,
-      aspectRatio: args.aspectRatio,
+      style: args.style,
     });
 
     return {

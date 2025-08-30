@@ -11,7 +11,7 @@ export default defineSchema({
     id: v.string(),
     userId: v.id("users"),
     prompt: v.string(),
-    aspectRatio: v.string(),
+    style: v.string(),
     imageId: v.id("_storage"),
   }).index("by_user", ["userId"]),
 });

@@ -11,7 +11,7 @@ type ScheduledGeneration = {
   id: string;
   userId: string;
   prompt: string;
-  aspectRatio: string;
+  style: string;
   createdAt: string;
   type: ScheduledType;
 };

@@ -1,14 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
-import { Loader2, Sparkles } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-import { useState } from "react";
+import { z } from "zod";
 
 import { useScheduledGens } from "@/hooks/use-scheduled-gens";
 
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 
 import { api } from "@/convex/_generated/api";
@@ -17,34 +18,43 @@ import { cn } from "@/utils/ui";
 
 const maxChars = 500;
 
-const aspectRatioOptions = [
-  { label: "Square 1:1", value: "1:1" },
-  { label: "Landscape 16:9", value: "16:9" },
-  { label: "Portrait 9:16", value: "9:16" },
-  { label: "Classic 4:3", value: "4:3" },
-  { label: "Photo 3:2", value: "3:2" },
-];
+const styleOptions = [
+  { label: "Auto", value: "auto" },
+  { label: "Cinematic", value: "cinematic" },
+  { label: "Vivid", value: "vivid" },
+  { label: "Studio light", value: "studio-light" },
+  { label: "Retro", value: "retro" },
+  { label: "Cyberpunk", value: "cyberpunk" },
+  { label: "Analog", value: "analog" },
+] as const;
 
-export const GenImageForm = () => {
-  const [value, setValue] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedAspectRatio, setSelectedAspectRatio] = useState(aspectRatioOptions[0].value);
+// Form schema with validation
+const formSchema = z.object({
+  prompt: z
+    .string()
+    .min(1, "Please enter a prompt")
+    .max(maxChars, `Prompt must be ${maxChars} characters or less`),
+  style: z.enum(["auto", "cinematic", "vivid", "studio-light", "retro", "cyberpunk", "analog"]),
+});
 
+type FormValues = z.infer<typeof formSchema>;
+
+export const GenImageForm = (props: { className?: string }) => {
   const { addScheduledGen } = useScheduledGens();
   const generateImg = useMutation(api.images.generate);
 
-  const handleGenerateImg = async () => {
-    if (!value) {
-      toast.error("Please enter a prompt");
-      return;
-    }
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      prompt: "",
+      style: "auto",
+    },
+  });
 
-    setIsGenerating(true);
-    const [response, error] = await tryCatch(
-      generateImg({ prompt: value, aspectRatio: selectedAspectRatio })
-    );
+  const isGenerating = form.formState.isSubmitting;
 
-    setIsGenerating(false);
+  const onSubmit = async (values: FormValues) => {
+    const [response, error] = await tryCatch(generateImg(values));
 
     if (error || !response?.id) {
       toast.error("Something went wrong");
@@ -54,58 +64,80 @@ export const GenImageForm = () => {
     toast.success("Your image is being generated");
     addScheduledGen({
       id: response.id,
-      prompt: value,
-      aspectRatio: selectedAspectRatio,
+      prompt: values.prompt,
+      style: values.style,
     });
+
+    // Reset form after successful submission
+    form.reset();
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <label className="flex flex-col gap-2">
-        <span className="text-sm font-medium">Enter your prompt</span>
-        <div className="relative">
-          <Textarea
-            value={value}
-            maxLength={maxChars}
-            placeholder="Enter your text..."
-            onChange={(e) => setValue(e.target.value.slice(0, maxChars))}
+    <section className={cn("flex flex-col gap-4", props.className)}>
+      <span className="text-base font-medium">Prompt</span>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="prompt"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Textarea
+                      {...field}
+                      maxLength={maxChars}
+                      placeholder="Enter your text..."
+                      className="min-h-[100px]"
+                    />
+                    <span
+                      className={cn(
+                        "text-muted-foreground absolute bottom-2 right-2 text-xs transition-colors",
+                        field.value.length >= maxChars && "text-destructive"
+                      )}
+                    >
+                      {field.value.length} / {maxChars}
+                    </span>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
-          <span
-            className={cn(
-              "text-muted-foreground absolute bottom-2 right-2 text-xs transition-colors",
-              value.length >= maxChars && "text-destructive"
-            )}
-          >
-            {value.length} / {maxChars}
-          </span>
-        </div>
-      </label>
-
-      <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium">Aspect Ratio</span>
-        <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          {aspectRatioOptions.map((option) => (
-            <Button
-              key={option.value}
-              size="sm"
-              className={cn(
-                "col-span-1 w-full",
-                selectedAspectRatio === option.value && "ring-ring ring-2"
+          <div className="flex items-center gap-10 overflow-hidden">
+            <FormField
+              control={form.control}
+              name="style"
+              render={({ field }) => (
+                <FormItem className="no-scrollbar flex flex-1 items-center gap-2 space-y-0 overflow-auto p-1">
+                  {styleOptions.map((option) => (
+                    <Button
+                      type="button"
+                      size="sm"
+                      key={option.value}
+                      className={cn(
+                        "h-6.75 rounded-full text-xs",
+                        field.value === option.value && "ring-ring ring-2"
+                      )}
+                      onClick={() => field.onChange(option.value)}
+                      variant="outline"
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                  <FormMessage />
+                </FormItem>
               )}
-              onClick={() => setSelectedAspectRatio(option.value)}
-              variant={"outline"}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
-      </div>
+            />
 
-      <Button disabled={isGenerating} className="mt-4" onClick={handleGenerateImg}>
-        {isGenerating ? <Loader2 className="animate-spin" /> : <Sparkles />}
-        Generate
-      </Button>
-    </div>
+            <Button type="submit" disabled={isGenerating} size="sm" className="h-7 shrink-0">
+              {isGenerating ? "Generating..." : "Generate"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </section>
   );
 };

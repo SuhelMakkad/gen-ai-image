@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "convex/react";
+import { useInterval } from "usehooks-ts";
 
 import { useEffect } from "react";
 
@@ -16,7 +17,8 @@ export const GenerationHistory = () => {
   const images = useQuery(api.images.list);
   const userId = useQuery(api.auth.currentUser);
 
-  const { scheduledGens, removeScheduledGen } = useScheduledGens();
+  const { scheduledGens, removeScheduledGen, checkStaleGens } = useScheduledGens();
+  useInterval(checkStaleGens, 2_000);
 
   const filteredScheduledGens = scheduledGens.filter((gen) => gen.userId === userId?._id);
 

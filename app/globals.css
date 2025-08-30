@@ -168,6 +168,7 @@
     display: none;
   }
 }
+
 @utility scroll-shadow {
   &:not([data-shadow="false"]) {
     --shadow-height: 20px;
