@@ -11,7 +11,6 @@ export const polar = new Polar(components.polar, {
       email: string;
     };
 
-    console.log("user", user);
     return {
       userId: user._id,
       email: user.email,
@@ -38,14 +37,3 @@ export const {
   generateCheckoutLink,
   generateCustomerPortalUrl,
 } = polar.api();
-
-// Credit amounts for each product
-export const PRODUCT_CREDIT_MAPPING = {
-  [polar.products.hobby]: 10, // 10 credits for hobby plan
-  [polar.products.pro]: 25,   // 25 credits for pro plan
-} as const;
-
-// Helper function to get credits for a product ID
-export const getCreditsForProduct = (productId: string): number => {
-  return PRODUCT_CREDIT_MAPPING[productId] || 0;
-};

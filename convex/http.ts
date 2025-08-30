@@ -3,30 +3,25 @@ import { httpRouter } from "convex/server";
 import { api } from "./_generated/api";
 import { httpAction } from "./_generated/server";
 import { auth } from "./auth";
-import { getCreditsForProduct, polar } from "./polar";
 
 const http = httpRouter();
 
-polar.registerRoutes(http);
 auth.addHttpRoutes(http);
 
 // Custom webhook handler for Polar payments to add credits
 http.route({
   method: "POST",
-  pathPrefix: "/polar/events/",
-  handler: httpAction(async (ctx, response) => {
+  path: "/webhooks/polar/events/",
+  handler: httpAction(async (ctx, req) => {
     try {
-      const body = await response.json();
-      console.info("[POLAR] Webhook received:", body);
+      const body = await req.json();
 
-      // Verify webhook signature if needed (implementation depends on Polar docs)
-
-      if (body.type !== "order.completed") {
+      if (body.type !== "order.paid") {
         return new Response("Event type not handled", { status: 200 });
       }
 
       const order = body.data;
-      const userId = order.user_id;
+      const userId = order.customer.metadata.userId;
       const productId = order.product_id;
 
       if (!userId || !productId) {
@@ -35,7 +30,10 @@ http.route({
       }
 
       // Get credit amount for this product
-      const creditAmount = getCreditsForProduct(productId);
+      const products = await ctx.runQuery(api.polar.getConfiguredProducts);
+      const product = Object.values(products || {}).find((product) => product?.id === productId);
+      const creditAmount = product?.metadata?.creditCount || 0;
+
       if (creditAmount === 0) {
         console.error("No credit mapping found for product:", productId);
         return new Response("Product not found", { status: 404 });
@@ -44,7 +42,7 @@ http.route({
       // Add credits to user account
       await ctx.runMutation(api.credits.addCredits, {
         userId: userId,
-        amount: creditAmount,
+        amount: Number(creditAmount),
         source: "polar_payment",
         sourceId: order.id,
         metadata: {

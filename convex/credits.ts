@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
+import { Id } from "./_generated/dataModel";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 
 const INITIAL_CREDITS = 3;
@@ -115,22 +116,23 @@ export const deductCredits = internalMutation({
 
 export const addCredits = mutation({
   args: {
-    userId: v.id("users"),
+    userId: v.string(),
     amount: v.number(),
     source: v.string(),
     sourceId: v.optional(v.string()),
     metadata: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
+    const userId = args.userId as Id<"users">;
     let userCredits = await ctx.db
       .query("userCredits")
-      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .first();
 
     if (!userCredits) {
       userCredits = await ctx.db.get(
         await ctx.db.insert("userCredits", {
-          userId: args.userId,
+          userId,
           balance: 0,
           totalEarned: 0,
           totalSpent: 0,
@@ -147,7 +149,7 @@ export const addCredits = mutation({
     });
 
     await ctx.db.insert("creditTransactions", {
-      userId: args.userId,
+      userId,
       type: "earned",
       amount: args.amount,
       source: args.source,

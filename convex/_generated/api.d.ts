@@ -17,6 +17,7 @@ import type * as http from "../http.js";
 import type * as images from "../images.js";
 import type * as lib_base64ToBlob from "../lib/base64ToBlob.js";
 import type * as lib_env from "../lib/env.js";
+import type * as lib_misc from "../lib/misc.js";
 import type * as polar from "../polar.js";
 
 import type {
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   images: typeof images;
   "lib/base64ToBlob": typeof lib_base64ToBlob;
   "lib/env": typeof lib_env;
+  "lib/misc": typeof lib_misc;
   polar: typeof polar;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
