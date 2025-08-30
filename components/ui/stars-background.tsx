@@ -1,9 +1,12 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { useTheme } from "next-themes";
 
+import { opacityFadeInOut, transition350 } from "@/utils/motion";
 import { cn } from "@/utils/ui";
 
 interface StarProps {
@@ -126,5 +129,14 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
     };
   }, [resolvedTheme, stars]);
 
-  return <canvas ref={canvasRef} className={cn("absolute inset-0 h-full w-full", className)} />;
+  return (
+    <motion.canvas
+      ref={canvasRef}
+      className={cn("absolute inset-0 h-full w-full", className)}
+      initial="hidden"
+      animate="visible"
+      variants={opacityFadeInOut}
+      transition={transition350}
+    />
+  );
 };

@@ -1,7 +1,11 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 import React, { useEffect, useRef, useState } from "react";
 
+import { opacityFadeInOut } from "@/utils/motion";
+import { transition350 } from "@/utils/motion";
 import { cn } from "@/utils/ui";
 
 interface ShootingStar {
@@ -113,7 +117,14 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
   }, [star]);
 
   return (
-    <svg ref={svgRef} className={cn("absolute inset-0 h-full w-full", className)}>
+    <motion.svg
+      ref={svgRef}
+      className={cn("absolute inset-0 h-full w-full", className)}
+      initial="hidden"
+      animate="visible"
+      variants={opacityFadeInOut}
+      transition={transition350}
+    >
       {star && (
         <rect
           key={star.id}
@@ -133,6 +144,6 @@ export const ShootingStars: React.FC<ShootingStarsProps> = ({
           <stop offset="100%" style={{ stopColor: starColor, stopOpacity: 1 }} />
         </linearGradient>
       </defs>
-    </svg>
+    </motion.svg>
   );
 };

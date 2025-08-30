@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+import { opacityFadeInOut, transition350 } from "@/utils/motion";
+
 interface GradientBarsProps {
   bars?: number;
   colors?: string[];
@@ -13,8 +15,14 @@ export const GradientBars = ({
 }: GradientBarsProps) => {
   const gradientStyle = `linear-gradient(to top, ${colors.join(", ")})`;
   return (
-    <div className="absolute inset-0 -z-10 rotate-180 overflow-hidden opacity-50">
-      <div className="flex h-full w-full">
+    <motion.div
+      className="absolute inset-0 -z-10 rotate-180 overflow-hidden"
+      initial="hidden"
+      animate="visible"
+      variants={opacityFadeInOut}
+      transition={transition350}
+    >
+      <div className="flex h-full w-full opacity-50">
         {Array.from({ length: bars }).map((_, index) => {
           const position = index / (bars - 1);
           const center = 0.5;
@@ -41,6 +49,6 @@ export const GradientBars = ({
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 };
