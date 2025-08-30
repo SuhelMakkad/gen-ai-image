@@ -13,7 +13,7 @@ export const Input = ({ className, type, ...props }: React.ComponentProps<"input
         "file:text-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium",
         "border-input shadow-xs selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground/75 dark:bg-input/30 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base outline-none transition-[color,box-shadow] placeholder:text-sm",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[2px]",
         "aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
         className
       )}
@@ -35,7 +35,7 @@ export const InputWithElement = React.forwardRef<HTMLInputElement, InputWithElem
         data-disabled={props.disabled}
         className={cn(
           "dark:bg-input/30 flex items-center gap-2 bg-transparent",
-          "border-input focus-within:border-ring focus-within:ring-ring/50 w-full min-w-0 rounded-md border focus-within:ring-[3px]",
+          "border-input focus-within:border-ring focus-within:ring-ring/50 w-full min-w-0 rounded-md border focus-within:ring-[2px]",
           "shadow-xs [data-disabled]:pointer-events-none [data-disabled]:cursor-not-allowed [data-disabled]:opacity-50 outline-none transition-[color,box-shadow]",
           "leading-6.5 text-base",
           "has-[[aria-invalid=true]]:border-destructive has-[[aria-invalid=true]]:ring-destructive/20 has-[[aria-invalid=true]]:dark:ring-destructive/40",
