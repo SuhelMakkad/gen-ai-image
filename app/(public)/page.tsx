@@ -1,3 +1,5 @@
+import { GradientBars } from "@/components/ui/gradient-bars";
+
 import { PromptTextarea } from "./components/prompt-textarea";
 import { PublicShowcase } from "./components/public-showcase";
 
@@ -14,6 +16,8 @@ const HomePage = () => {
         </header>
 
         <PromptTextarea />
+
+        <GradientBars />
       </section>
 
       <section className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">

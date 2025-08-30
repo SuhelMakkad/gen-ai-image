@@ -22,7 +22,13 @@ export const PromptTextarea = (props: React.ComponentProps<typeof InputWithEleme
   const user = useQuery(api.auth.currentUser);
   const { setPrompt } = useOnboardingPrompt();
 
-  const handleSendClick = () => {
+  const handleSendClick = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!value) {
+      return;
+    }
+
     setPrompt(value);
     if (!user) {
       router.push(routes.signIn);
@@ -33,14 +39,14 @@ export const PromptTextarea = (props: React.ComponentProps<typeof InputWithEleme
   };
 
   return (
-    <div className="relative w-full max-w-lg">
+    <form onSubmit={handleSendClick} className="relative w-full max-w-lg">
       <InputWithElement
+        required
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className={`h-12 w-full resize-none outline-none ${props.className}`}
-        placeholder=""
+        className={`h-12 w-full outline-none ${props.className}`}
         trailingElement={
-          <Button className="size-6.5 rounded-full" onClick={handleSendClick} type="button">
+          <Button className="size-6.5 rounded-full" type="submit">
             <ArrowUp />
             <span className="sr-only">Generate</span>
           </Button>
@@ -49,7 +55,7 @@ export const PromptTextarea = (props: React.ComponentProps<typeof InputWithEleme
       />
 
       {!value && <AnimatedPlaceholder />}
-    </div>
+    </form>
   );
 };
 

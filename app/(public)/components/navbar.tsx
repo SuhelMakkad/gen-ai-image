@@ -32,7 +32,7 @@ export function Navbar(props: { className?: string }) {
   return (
     <div
       className={cn(
-        "bg-background/95 supports-[backdrop-filter]:bg-background/60 container-padding sticky top-0 z-10 flex items-center justify-between gap-2 py-2 backdrop-blur-sm",
+        "container-padding sticky top-0 z-10 flex items-center justify-between gap-2 bg-transparent py-2",
         props.className
       )}
     >
@@ -66,7 +66,7 @@ export function Navbar(props: { className?: string }) {
       </Authenticated>
 
       <Unauthenticated>
-        <Button asChild>
+        <Button asChild className="h-6.75 px-2.5">
           <Link href={routes.signIn}>Sign In</Link>
         </Button>
       </Unauthenticated>
