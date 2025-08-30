@@ -1,12 +1,14 @@
 import GitHub from "@auth/core/providers/github";
+import Google from "@auth/core/providers/google";
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
-import { queryGeneric } from "convex/server";
+
+import { query } from "./_generated/server";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [GitHub],
+  providers: [GitHub, Google],
 });
 
-export const currentUser = queryGeneric({
+export const currentUser = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
@@ -14,12 +16,6 @@ export const currentUser = queryGeneric({
       return null;
     }
 
-    return (await ctx.db.get(userId)) as {
-      email: string;
-      name: string;
-      image: string;
-      _creationTime: number;
-      _id: string;
-    };
+    return await ctx.db.get(userId);
   },
 });

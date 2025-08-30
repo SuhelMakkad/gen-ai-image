@@ -49,8 +49,8 @@ export function ChatSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       {/* Header */}
-      <SidebarHeader className="flex items-center gap-1">
-        <SidebarMenu>
+      <SidebarHeader className="flex items-center gap-0">
+        <SidebarMenu className="mb-1.5">
           <SidebarMenuItem className="mt-1 flex flex-row items-center gap-2">
             <span className="w-full text-center text-base font-medium">Gen AI Img</span>
           </SidebarMenuItem>
@@ -85,7 +85,7 @@ export function ChatSidebar() {
                 {chats.map((chat, index) => (
                   <SidebarMenuItem key={index}>
                     <SidebarMenuButton asChild>
-                      <Link href={routes.chat(index.toString())} className="w-full text-left">
+                      <Link href={routes.gen(index.toString())} className="w-full text-left">
                         <MessageSquare className="h-4 w-4" />
                         <span className="truncate">{chat}</span>
                       </Link>

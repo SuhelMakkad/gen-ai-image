@@ -26,7 +26,7 @@ export const PromptTextarea = (props: React.ComponentProps<typeof InputWithEleme
       return;
     }
 
-    router.push(routes.chat("new"));
+    router.push(routes.gen("new"));
   };
 
   return (

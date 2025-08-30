@@ -7,7 +7,11 @@ import { v } from "convex/values";
 // The schema provides more precise TypeScript types.
 export default defineSchema({
   ...authTables,
-  numbers: defineTable({
-    value: v.number(),
-  }),
+  generations: defineTable({
+    id: v.string(),
+    userId: v.id("users"),
+    prompt: v.string(),
+    aspectRatio: v.string(),
+    imageId: v.id("_storage"),
+  }).index("by_user", ["userId"]),
 });
