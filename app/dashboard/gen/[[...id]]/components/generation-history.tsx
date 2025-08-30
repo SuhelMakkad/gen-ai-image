@@ -34,7 +34,7 @@ export const GenerationHistory = () => {
     <ul className="flex flex-col gap-2">
       {filteredScheduledGens.map((gen) => (
         <li key={gen.id} className="flex items-center gap-2">
-          <Skeleton className="size-10 rounded-md" />
+          <Skeleton className="size-25 rounded-md" />
           <span>{gen.prompt}</span>
         </li>
       ))}

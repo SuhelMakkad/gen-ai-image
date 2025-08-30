@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useEffect } from "react";
+
+import { useOnboardingPrompt } from "@/hooks/use-onboarding-prompt";
 import { useScheduledGens } from "@/hooks/use-scheduled-gens";
 
 import { Button } from "@/components/ui/button";
@@ -34,19 +37,20 @@ const formSchema = z.object({
     .string()
     .min(1, "Please enter a prompt")
     .max(maxChars, `Prompt must be ${maxChars} characters or less`),
-  style: z.enum(["auto", "cinematic", "vivid", "studio-light", "retro", "cyberpunk", "analog"]),
+  style: z.enum(styleOptions.map((option) => option.value)),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export const GenImageForm = (props: { className?: string }) => {
+  const { prompt: onboardingPrompt, setPrompt: setOnboardingPrompt } = useOnboardingPrompt();
   const { addScheduledGen } = useScheduledGens();
   const generateImg = useMutation(api.images.generate);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      prompt: "",
+      prompt: onboardingPrompt,
       style: "auto",
     },
   });
@@ -54,7 +58,12 @@ export const GenImageForm = (props: { className?: string }) => {
   const isGenerating = form.formState.isSubmitting;
 
   const onSubmit = async (values: FormValues) => {
-    const [response, error] = await tryCatch(generateImg(values));
+    const [response, error] = await tryCatch(
+      generateImg({
+        prompt: values.prompt,
+        style: values.style,
+      })
+    );
 
     if (error || !response?.id) {
       toast.error("Something went wrong");
@@ -68,9 +77,14 @@ export const GenImageForm = (props: { className?: string }) => {
       style: values.style,
     });
 
-    // Reset form after successful submission
-    form.reset();
+    form.setValue("prompt", "");
   };
+
+  useEffect(() => {
+    setOnboardingPrompt("");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prompt]);
 
   return (
     <section className={cn("flex flex-col gap-4", props.className)}>

@@ -18,8 +18,9 @@ import {
 
 import { api } from "@/convex/_generated/api";
 import { routes } from "@/utils/routes";
+import { cn } from "@/utils/ui";
 
-export function Navbar() {
+export function Navbar(props: { className?: string }) {
   const { signOut } = useAuthActions();
   const { theme, setTheme } = useTheme();
   const user = useQuery(api.auth.currentUser);
@@ -29,7 +30,12 @@ export function Navbar() {
   };
 
   return (
-    <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 container-padding flex items-center justify-between gap-2 border-b py-2 backdrop-blur">
+    <div
+      className={cn(
+        "bg-background/95 supports-[backdrop-filter]:bg-background/60 container-padding flex items-center justify-between gap-2 border-b py-2 backdrop-blur",
+        props.className
+      )}
+    >
       <Link href="/" className="text-foreground font-semibold">
         Gen AI Image
       </Link>

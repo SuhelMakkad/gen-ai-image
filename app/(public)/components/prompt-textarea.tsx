@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
+import { useOnboardingPrompt } from "@/hooks/use-onboarding-prompt";
+
 import { Button } from "@/components/ui/button";
 import { InputWithElement } from "@/components/ui/input";
 
@@ -18,9 +20,10 @@ export const PromptTextarea = (props: React.ComponentProps<typeof InputWithEleme
   const router = useRouter();
   const [value, setValue] = useState("");
   const user = useQuery(api.auth.currentUser);
+  const { setPrompt } = useOnboardingPrompt();
 
   const handleSendClick = () => {
-    sessionStorage.setItem("prompt", value);
+    setPrompt(value);
     if (!user) {
       router.push(routes.signIn);
       return;
