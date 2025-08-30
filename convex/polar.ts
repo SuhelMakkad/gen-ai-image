@@ -10,10 +10,17 @@ export const polar = new Polar(components.polar, {
       _id: string;
       email: string;
     };
+
+    console.log("user", user);
     return {
       userId: user._id,
       email: user.email,
     };
+  },
+
+  products: {
+    hobby: "985b83bd-6d19-42f8-9131-d967fff66719",
+    pro: "2d48971e-e82e-467c-a7ba-e0a206fec6c0",
   },
 
   // Optional: Set Polar configuration directly in code

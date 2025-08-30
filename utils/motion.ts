@@ -1,6 +1,6 @@
 import { Transition, Variants } from "framer-motion";
 
-export const transition: Transition = { duration: 0.35, ease: "easeInOut" };
+export const transition350: Transition = { duration: 0.35, ease: "easeInOut" };
 export const transition250: Transition = { duration: 0.25, ease: "easeInOut" };
 export const transition200: Transition = { duration: 0.2, ease: "easeInOut" };
 export const transition150: Transition = { duration: 0.15, ease: "easeInOut" };
@@ -18,4 +18,14 @@ export const opacityFadeInOut: Variants = {
 export const scaleInOut: Variants = {
   hidden: { scale: 0 },
   visible: { scale: 1 },
+};
+
+export const slideLeft: Variants = {
+  hidden: { x: -100, opacity: 0 },
+  visible: { x: 0, opacity: 1 },
+};
+
+export const slideRight: Variants = {
+  hidden: { x: 100, opacity: 0 },
+  visible: { x: 0, opacity: 1 },
 };
