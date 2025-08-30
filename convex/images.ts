@@ -59,8 +59,26 @@ export const generate = mutation({
     if (!userId) {
       throw new Error("User not found");
     }
-
     const uuid = uuidv4();
+
+    // Check if user has sufficient credits
+    const creditCheck = await ctx.runQuery(internal.credits.checkCreditsAvailable, {
+      requiredAmount: 1,
+    });
+
+    if (!creditCheck.available) {
+      throw new Error(
+        `Insufficient credits. You have ${creditCheck.balance} credits but need ${creditCheck.required}.`
+      );
+    }
+
+    // Deduct credits before generation
+    await ctx.runMutation(internal.credits.deductCredits, {
+      userId,
+      amount: 1,
+      source: "image_generation",
+      sourceId: uuid, // Will be set to generation ID after creation
+    });
 
     await ctx.scheduler.runAfter(0, internal.ai.helpers.generateImgAction, {
       uuid,

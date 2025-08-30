@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { api } from "@/convex/_generated/api";
 import { opacityFadeInOut, slideLeft, slideRight, transition250 } from "@/utils/motion";
+import { routes } from "@/utils/routes";
 import { cn } from "@/utils/ui";
 
 const tabTransition: Transition = {
@@ -33,7 +34,7 @@ export const PlanSelection = () => {
     const response = await generateCheckoutLink({
       productIds: [planId],
       origin: window.location.origin,
-      successUrl: window.location.origin + "/success",
+      successUrl: window.location.origin + routes.gen,
     });
 
     if (response) {

@@ -12,6 +12,7 @@ import type * as ai_helpers from "../ai/helpers.js";
 import type * as ai_openai from "../ai/openai.js";
 import type * as ai_systemPrompt from "../ai/systemPrompt.js";
 import type * as auth from "../auth.js";
+import type * as credits from "../credits.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
 import type * as lib_base64ToBlob from "../lib/base64ToBlob.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   "ai/openai": typeof ai_openai;
   "ai/systemPrompt": typeof ai_systemPrompt;
   auth: typeof auth;
+  credits: typeof credits;
   http: typeof http;
   images: typeof images;
   "lib/base64ToBlob": typeof lib_base64ToBlob;

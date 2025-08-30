@@ -4,7 +4,7 @@ import { TextRipple } from "@/components/ui/text-ripple";
 
 import { githubRepoLink, socials } from "@/utils/socials";
 
-import { PlanSelection } from "./components/plan-selection";
+import { PlanSelection } from "../../components/plan-selection";
 import { PromptTextarea } from "./components/prompt-textarea";
 import { PublicShowcase } from "./components/public-showcase";
 

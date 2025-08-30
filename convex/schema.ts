@@ -14,4 +14,21 @@ export default defineSchema({
     style: v.string(),
     imageId: v.id("_storage"),
   }).index("by_user", ["userId"]),
+  userCredits: defineTable({
+    userId: v.id("users"),
+    balance: v.number(),
+    totalEarned: v.number(),
+    totalSpent: v.number(),
+  }).index("by_user", ["userId"]),
+  creditTransactions: defineTable({
+    userId: v.id("users"),
+    type: v.union(v.literal("earned"), v.literal("spent")),
+    amount: v.number(),
+    source: v.string(),
+    sourceId: v.optional(v.string()),
+    balanceAfter: v.number(),
+    metadata: v.optional(v.any()),
+  }).index("by_user", ["userId"])
+    .index("by_type", ["type"])
+    .index("by_user_type", ["userId", "type"]),
 });
