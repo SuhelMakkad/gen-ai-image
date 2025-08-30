@@ -34,7 +34,7 @@ export default function SignIn() {
       setLoading(provider);
 
       await signIn(provider, {
-        redirectTo: routes.gen("new"),
+        redirectTo: routes.gen,
       });
     } catch (error) {
       setLoading(null);

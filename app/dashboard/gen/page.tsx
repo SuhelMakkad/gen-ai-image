@@ -1,5 +1,5 @@
 import { GenImageForm } from "./components/gen-img-form";
-import { GenerationHistory } from "./components/generation-history";
+import { UserGenerationHistory } from "./components/generation-history";
 
 const GenImagePage = () => {
   return (
@@ -11,7 +11,7 @@ const GenImagePage = () => {
       <section className="mx-auto mb-20 flex w-full max-w-4xl flex-col gap-4">
         <h1 className="text-lg font-medium">Result</h1>
 
-        <GenerationHistory />
+        <UserGenerationHistory />
       </section>
     </div>
   );
