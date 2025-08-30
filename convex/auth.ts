@@ -2,10 +2,20 @@ import GitHub from "@auth/core/providers/github";
 import Google from "@auth/core/providers/google";
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
 
+import { api } from "./_generated/api";
 import { query } from "./_generated/server";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [GitHub, Google],
+  callbacks: {
+    afterUserCreatedOrUpdated: async (ctx, args) => {
+      if (!args.existingUserId) {
+        ctx.runMutation(api.credits.initializeUserCredits, {
+          userId: args.userId,
+        });
+      }
+    },
+  },
 });
 
 export const currentUser = query({
