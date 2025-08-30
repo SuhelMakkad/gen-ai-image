@@ -2,7 +2,7 @@
 
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { Moon, Sun, User } from "lucide-react";
+import { Coins, LogOut, Moon, Sun, User } from "lucide-react";
 
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -20,10 +20,13 @@ import { api } from "@/convex/_generated/api";
 import { routes } from "@/utils/routes";
 import { cn } from "@/utils/ui";
 
-export function Navbar(props: { className?: string }) {
+import { CreditDetails } from "./credit-details";
+
+export const Navbar = (props: { className?: string }) => {
   const { signOut } = useAuthActions();
   const { theme, setTheme } = useTheme();
   const user = useQuery(api.auth.currentUser);
+  const userCredits = useQuery(api.credits.getUserCredits);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -47,6 +50,13 @@ export function Navbar(props: { className?: string }) {
       </Button>
 
       <Authenticated>
+        <div className="bg-muted flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium">
+          <Coins className="text-muted-foreground h-4 w-4" />
+          <span>{userCredits?.balance || 0}</span>
+        </div>
+      </Authenticated>
+
+      <Authenticated>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
@@ -58,9 +68,18 @@ export function Navbar(props: { className?: string }) {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem className="font-medium">{user?.name}</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => signOut()}>Sign out</DropdownMenuItem>
+          <DropdownMenuContent align="end" className="w-56">
+            <CreditDetails />
+
+            <div className="flex flex-col px-2 py-3">
+              <div className="font-medium">{user?.name}</div>
+              <div className="text-muted-foreground truncate text-xs">{user?.email}</div>
+            </div>
+
+            <DropdownMenuItem className="text-sm" onClick={() => signOut()}>
+              <LogOut />
+              Log out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </Authenticated>
@@ -72,4 +91,4 @@ export function Navbar(props: { className?: string }) {
       </Unauthenticated>
     </div>
   );
-}
+};
