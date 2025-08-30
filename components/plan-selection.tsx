@@ -5,6 +5,8 @@ import { AnimatePresence, motion, Transition } from "framer-motion";
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -20,16 +22,23 @@ const tabTransition: Transition = {
 };
 
 export const PlanSelection = () => {
-  const products = useQuery(api.polar.getConfiguredProducts);
-  const plans = [products?.hobby, products?.pro].filter(Boolean);
   const [activePlanId, setActivePlanId] = useState<string | null>(null);
+  const router = useRouter();
 
+  const products = useQuery(api.polar.getConfiguredProducts);
   const generateCheckoutLink = useAction(api.polar.generateCheckoutLink);
+  const user = useQuery(api.auth.currentUser);
 
+  const plans = [products?.hobby, products?.pro].filter(Boolean);
   const activePlan = plans.find((plan) => plan?.id === activePlanId);
 
   const handlePlanClick = async (planId: string | null) => {
     if (!planId) return;
+
+    if (!user) {
+      router.push(routes.signIn);
+      return;
+    }
 
     const response = await generateCheckoutLink({
       productIds: [planId],
@@ -95,11 +104,11 @@ export const PlanSelection = () => {
                 onClick={() => handlePlanClick(activePlanId)}
                 className="hover:bg-secondary group flex w-full flex-col items-center gap-2 p-4 transition-colors"
               >
-                <h3 className="text-muted-foreground group-hover:text-foreground group-hover:scale-120 text-base font-medium transition-transform duration-300">
+                <h3 className="text-muted-foreground group-hover:text-foreground group-hover:scale-115 text-base font-medium transition-transform duration-300">
                   {activePlan?.name}
                 </h3>
                 <p className="group-hover:text-muted-foreground text-2xl font-medium transition-colors">
-                  ${(activePlan?.prices[0].priceAmount ?? 0) / 100}/month
+                  ${(activePlan?.prices[0].priceAmount ?? 0) / 100}
                 </p>
               </motion.button>
             </AnimatePresence>
