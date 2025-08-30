@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as ai_helpers from "../ai/helpers.js";
 import type * as ai_openai from "../ai/openai.js";
+import type * as ai_systemPrompt from "../ai/systemPrompt.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as images from "../images.js";
@@ -32,6 +33,7 @@ import type * as lib_env from "../lib/env.js";
 declare const fullApi: ApiFromModules<{
   "ai/helpers": typeof ai_helpers;
   "ai/openai": typeof ai_openai;
+  "ai/systemPrompt": typeof ai_systemPrompt;
   auth: typeof auth;
   http: typeof http;
   images: typeof images;

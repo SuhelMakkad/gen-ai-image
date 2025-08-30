@@ -84,7 +84,7 @@ export const GenImageForm = (props: { className?: string }) => {
     setOnboardingPrompt("");
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prompt]);
+  }, [onboardingPrompt]);
 
   return (
     <section className={cn("isolate flex flex-col gap-4", props.className)}>

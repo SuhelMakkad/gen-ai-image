@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
 import { env } from "../lib/env";
+import { systemPrompt } from "./systemPrompt";
 
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
@@ -17,7 +18,7 @@ export const genImage = async (prompt: string, style: string) => {
         content: [
           {
             type: "text",
-            text: `You are a helpful assistant that generates images based on a prompt. Only respond with the image data and nothing else. The style of the image is ${style}.`,
+            text: systemPrompt,
           },
         ],
       },
@@ -26,7 +27,7 @@ export const genImage = async (prompt: string, style: string) => {
         content: [
           {
             type: "text",
-            text: prompt,
+            text: `${prompt} The style of the image is ${style}.`,
           },
         ],
       },

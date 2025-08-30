@@ -57,7 +57,7 @@ export const ListItem = ({
   return (
     <ImageDialog asChild image={image}>
       <li
-        className="h-55 group relative col-span-1 w-full cursor-pointer overflow-hidden transition-all duration-300 hover:scale-105"
+        className="h-55 bg-secondary group relative col-span-1 w-full cursor-pointer overflow-hidden rounded-md transition-all duration-300 hover:scale-105"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
