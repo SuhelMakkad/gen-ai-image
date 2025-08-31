@@ -1,7 +1,8 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Authenticated, Unauthenticated, useAction, useQuery } from "convex/react";
+import { useAction, useConvexAuth, useQuery } from "convex/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRightIcon, Coins, LogOut, Moon, Sun, User } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { api } from "@/convex/_generated/api";
+import { opacityFadeInOut, transition250 } from "@/utils/motion";
 import { routes } from "@/utils/routes";
 import { cn } from "@/utils/ui";
 
@@ -32,6 +34,8 @@ export const Navbar = (props: { className?: string }) => {
   const user = useQuery(api.auth.currentUser);
   const userCredits = useQuery(api.credits.getUserCredits);
   const generateCustomerPortalUrl = useAction(api.polar.generateCustomerPortalUrl);
+
+  const { isAuthenticated } = useConvexAuth();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -65,54 +69,71 @@ export const Navbar = (props: { className?: string }) => {
         <span className="sr-only">Toggle theme</span>
       </Button>
 
-      <Authenticated>
-        <div className="bg-muted flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium">
-          <Coins className="text-muted-foreground h-4 w-4" />
-          <span>{userCredits?.balance || 0}</span>
-        </div>
-      </Authenticated>
-
-      <Authenticated>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user?.image} alt={user?.name} />
-                <AvatarFallback>
-                  <User className="h-4 w-4" />
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <CreditDetails />
-
-            <div className="flex flex-col px-2 py-3">
-              <div className="font-medium">{user?.name}</div>
-              <div className="text-muted-foreground truncate text-xs">{user?.email}</div>
+      <AnimatePresence initial={false} mode="wait">
+        {isAuthenticated ? (
+          <motion.div
+            key="authenticated"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={transition250}
+            variants={opacityFadeInOut}
+            className="flex items-center gap-2"
+          >
+            <div className="bg-muted flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium">
+              <Coins className="text-muted-foreground h-4 w-4" />
+              <span>{userCredits?.balance || 0}</span>
             </div>
 
-            {!!billingUrl && (
-              <DropdownMenuItem className="text-sm" asChild>
-                <a href={billingUrl} target="_blank" rel="noopener noreferrer">
-                  <ArrowUpRightIcon />
-                  Billing
-                </a>
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem className="text-sm" onClick={() => signOut()}>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </Authenticated>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user?.image} alt={user?.name} />
+                    <AvatarFallback>
+                      <User className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <CreditDetails />
 
-      <Unauthenticated>
-        <Button asChild className="h-6.75 px-2.5">
-          <Link href={routes.signIn}>Sign In</Link>
-        </Button>
-      </Unauthenticated>
+                <div className="flex flex-col px-2 py-3">
+                  <div className="font-medium">{user?.name}</div>
+                  <div className="text-muted-foreground truncate text-xs">{user?.email}</div>
+                </div>
+
+                {!!billingUrl && (
+                  <DropdownMenuItem className="text-sm" asChild>
+                    <a href={billingUrl} target="_blank" rel="noopener noreferrer">
+                      <ArrowUpRightIcon />
+                      Billing
+                    </a>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem className="text-sm" onClick={() => signOut()}>
+                  <LogOut />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="unauthenticated"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={transition250}
+            variants={opacityFadeInOut}
+          >
+            <Button asChild className="h-6.75 px-2.5">
+              <Link href={routes.signIn}>Sign In</Link>
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
