@@ -1,14 +1,14 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
-import { useAction, useConvexAuth, useQuery } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRightIcon, Coins, LogOut, Moon, Sun, User } from "lucide-react";
 
-import { useEffect, useState } from "react";
-
 import { useTheme } from "next-themes";
 import Link from "next/link";
+
+import { useGetPolarCustUrl } from "@/hooks/use-get-polar-cust-url";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -27,30 +27,18 @@ import { cn } from "@/utils/ui";
 import { CreditDetails } from "./credit-details";
 
 export const Navbar = (props: { className?: string }) => {
-  const [billingUrl, setBillingUrl] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const { signOut } = useAuthActions();
 
   const user = useQuery(api.auth.currentUser);
   const userCredits = useQuery(api.credits.getUserCredits);
-  const generateCustomerPortalUrl = useAction(api.polar.generateCustomerPortalUrl);
+  const { billingUrl } = useGetPolarCustUrl();
 
   const { isAuthenticated } = useConvexAuth();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
-
-  useEffect(() => {
-    const fetchBillingUrl = async () => {
-      const response = await generateCustomerPortalUrl().catch(() => null);
-      if (response) {
-        setBillingUrl(response.url);
-      }
-    };
-
-    fetchBillingUrl();
-  }, [generateCustomerPortalUrl]);
 
   return (
     <div
