@@ -97,7 +97,22 @@ export const listPublicShowcase = query({
   args: {},
   handler: async (ctx) => {
     const maxGenerations = 16;
-    const generations = await ctx.db.query("generations").order("desc").take(maxGenerations);
+    const showcaseUserEmail = "makadsuhel11@gmail.com";
+
+    const showcaseUser = await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", showcaseUserEmail))
+      .first();
+
+    if (!showcaseUser) {
+      return [];
+    }
+
+    const generations = await ctx.db
+      .query("generations")
+      .withIndex("by_user", (q) => q.eq("userId", showcaseUser._id))
+      .order("desc")
+      .take(maxGenerations);
 
     // get latest generation for each user
     const generationsWithImageUrl = await Promise.all(
