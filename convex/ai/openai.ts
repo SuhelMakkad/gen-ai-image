@@ -10,7 +10,7 @@ const openai = new OpenAI({
 
 export const genImage = async (prompt: string, style: string) => {
   const completion = await openai.chat.completions.create({
-    model: "google/gemini-2.5-flash-image-preview:free",
+    model: "google/gemini-2.5-flash-image-preview",
 
     messages: [
       {
